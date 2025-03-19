@@ -9,12 +9,15 @@ import { SlackRepositoryImpl } from "./slack";
 import { TweetRepositoryImpl } from "./tweet";
 import type { IndieHackersRepository } from "@/app/domain/repositories/indieHackers";
 import { IndieHackersRepositoryImpl } from "./indieHackers";
+import { PromptsRepository } from "@/app/domain/repositories/prompts";
+import { PromptsRepositoryImple } from "./prompts";
 
 export class RepositoryProvider {
   tweet: TweetRepository;
   llm: LLMRepository;
   slack: SlackRepository;
   indieHackers: IndieHackersRepository;
+  prompts: PromptsRepository;
 
   constructor() {
     if (process.env.ENV === "production") {
@@ -28,5 +31,7 @@ export class RepositoryProvider {
       this.slack = new SlackRepositoryEmpty();
       this.indieHackers = new IndieHackersRepositoryImpl();
     }
+
+    this.prompts = new PromptsRepositoryImple();
   }
 }
