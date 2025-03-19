@@ -8,6 +8,7 @@ import {
   List,
 } from "@chakra-ui/react";
 import { ColorModeButton } from "@/components/ui/color-mode";
+import { PromptDialog } from "./components/ui/promptDialog";
 
 export default async function Home() {
   return (
@@ -22,9 +23,7 @@ export default async function Home() {
         >
           <Flex direction="column" justify="space-between" align="center">
             <Link href="/">Home</Link>
-            <Button width="100%" rounded={32}>
-              SUBMIT
-            </Button>
+            <PromptDialog />
           </Flex>
         </Box>
         <Flex direction="column" align="center" justify="center" w="100%">

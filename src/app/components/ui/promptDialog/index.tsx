@@ -1,18 +1,11 @@
-import {
-  Button,
-  CloseButton,
-  Dialog,
-  Portal,
-  useToggle,
-} from "@chakra-ui/react";
+import { Button, CloseButton, Dialog, Portal } from "@chakra-ui/react";
 
 export const PromptDialog = () => {
-  const { pressed, setPressed } = useToggle({});
   return (
-    <Dialog.Root size="cover" placement="center" motionPreset="slide-in-bottom">
-      <Dialog.Trigger>
-        <Button variant="outline" size="sm" onClick={() => console.log("test")}>
-          Open Dialog
+    <Dialog.Root>
+      <Dialog.Trigger asChild>
+        <Button width="100%" rounded={32}>
+          Setting Prompt
         </Button>
       </Dialog.Trigger>
       <Portal>
@@ -20,15 +13,20 @@ export const PromptDialog = () => {
         <Dialog.Positioner>
           <Dialog.Content>
             <Dialog.Header>
-              <Dialog.Title>Dialog Title</Dialog.Title>
-              <Dialog.CloseTrigger asChild>
-                <CloseButton size="sm" />
-              </Dialog.CloseTrigger>
+              <Dialog.Title>Prompt</Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              <p>Let's set up a prompt to generate X posts.</p>
             </Dialog.Body>
+            <Dialog.Footer>
+              <Dialog.ActionTrigger asChild>
+                <Button variant="outline">Cancel</Button>
+              </Dialog.ActionTrigger>
+              <Button>Save</Button>
+            </Dialog.Footer>
+            <Dialog.CloseTrigger asChild>
+              <CloseButton size="sm" />
+            </Dialog.CloseTrigger>
           </Dialog.Content>
         </Dialog.Positioner>
       </Portal>
