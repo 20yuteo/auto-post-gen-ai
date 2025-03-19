@@ -6,17 +6,41 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "sql": "drizzle-kit generate",
+    "drop": "drizzle-kit drop",
+    "migrate": "drizzle-kit push",
+    "format": "biome format --write",
+    "check": "biome check --write"
   },
   "dependencies": {
+    "@chakra-ui/react": "^3.13.0",
+    "@google/generative-ai": "^0.24.0",
+    "@slack/web-api": "^7.8.0",
+    "@supabase/supabase-js": "^2.49.1",
+    "crypto": "^1.0.1",
+    "crypto-browserify": "^3.12.1",
+    "crypto-js": "^4.2.0",
+    "drizzle-kit": "^0.30.5",
+    "drizzle-orm": "^0.40.0",
+    "next": "15.2.2",
+    "next-themes": "^0.4.6",
+    "oauth-1.0a": "^2.2.6",
+    "pg": "^8.14.0",
+    "postgres": "^3.4.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.2.3"
+    "react-icons": "^5.5.0"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@types/crypto-js": "^4.2.2",
     "@types/node": "^20",
     "@types/react": "^19",
-    "@types/react-dom": "^19"
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.2.2",
+    "next-transpile-modules": "^10.0.1",
+    "typescript": "^5"
   }
 }
