@@ -1,8 +1,9 @@
 import { Button, CloseButton, Dialog, Portal } from "@chakra-ui/react";
+import { Editor } from "../editor/DynamicEditor";
 
 export const PromptDialog = () => {
   return (
-    <Dialog.Root>
+    <Dialog.Root size="full">
       <Dialog.Trigger asChild>
         <Button width="100%" rounded={32}>
           Setting Prompt
@@ -17,6 +18,7 @@ export const PromptDialog = () => {
             </Dialog.Header>
             <Dialog.Body>
               <p>Let's set up a prompt to generate X posts.</p>
+              <Editor />
             </Dialog.Body>
             <Dialog.Footer>
               <Dialog.ActionTrigger asChild>
