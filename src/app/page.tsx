@@ -7,12 +7,14 @@ import {
   Image,
   List,
 } from "@chakra-ui/react";
+import { ColorModeButton } from "@/components/ui/color-mode";
 
 export default async function Home() {
   return (
     <Box p={8} maxW="800px" mx="auto">
       <Flex direction="column" align="center" justify="center">
         <Image src="/next.svg" alt="Next.js logo" boxSize="180px" />
+        <ColorModeButton />
         <List.Root>
           <ListItem>
             Get started by editing <code>src/app/page.tsx</code>.

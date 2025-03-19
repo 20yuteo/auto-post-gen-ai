@@ -1,6 +1,7 @@
 "use client";
 
 import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
+import { ColorModeProvider } from "@/components/ui/color-mode";
 
 export default function RootLayout({
   children,
@@ -8,12 +9,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja">
+    <html lang="ja" className="dark" style={{ colorScheme: "dark" }}>
       <body>
         <ChakraProvider value={defaultSystem}>
-          {/* <ThemeProvider attribute="class" disableTransitionOnChange> */}
-          {children}
-          {/* </ThemeProvider> */}
+          <ColorModeProvider>{children}</ColorModeProvider>
         </ChakraProvider>
       </body>
     </html>
