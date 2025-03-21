@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Box,
   Flex,
@@ -8,9 +10,9 @@ import {
   List,
 } from "@chakra-ui/react";
 import { ColorModeButton } from "@/components/ui/color-mode";
-import { PromptDialog } from "./components/ui/promptDialog";
+import PromptDialog from "./components/ui/promptDialog/PromptDialog";
 
-export default async function Home() {
+export default function Home() {
   return (
     <Box maxW="100vw" mx="auto" maxH="100vh">
       <Flex direction="row" align="center" justify="space-between" maxW="100vw">

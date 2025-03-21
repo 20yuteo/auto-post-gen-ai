@@ -1,12 +1,12 @@
 import { dbClient } from "@/app/configs";
 import {
   PromptsRepository,
-  PromptType,
+  PromptInput,
 } from "@/app/domain/repositories/prompts";
 import { prompts } from "@/schema/prompts";
 
 export class PromptsRepositoryImple implements PromptsRepository {
-  create(input: PromptType): Promise<void> {
+  create(input: PromptInput): Promise<void> {
     dbClient
       .insert(prompts)
       .values({

@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Heading } from "@chakra-ui/react";
 import { RiTwitterXFill } from "react-icons/ri";
-import { PromptDialog } from "./promptDialog";
+import { PromptDialog } from "./promptDialog/DynamicPromptDialog";
 
 export const Nav = () => {
   const onClick = () => {

@@ -1,9 +1,10 @@
-export type PromptType = {
+export type PromptInput = {
   id?: string;
   userId: string;
+  title: string;
   content: string;
 };
 
 export interface PromptsRepository {
-  create: (input: PromptType) => Promise<void>;
+  create: (input: PromptInput) => Promise<void>;
 }
