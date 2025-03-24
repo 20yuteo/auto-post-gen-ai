@@ -10,7 +10,6 @@ import {
   List,
 } from "@chakra-ui/react";
 import { ColorModeButton } from "@/components/ui/color-mode";
-import PromptDialog from "./components/ui/promptDialog/PromptDialog";
 
 export default function Home() {
   return (
@@ -25,7 +24,7 @@ export default function Home() {
         >
           <Flex direction="column" justify="space-between" align="center">
             <Link href="/">Home</Link>
-            <PromptDialog />
+            <Link href="/prompt">Prompt</Link>
           </Flex>
         </Box>
         <Flex direction="column" align="center" justify="center" w="100%">

@@ -8,16 +8,21 @@ import { useColorMode } from "../color-mode";
 
 type Props = {
   markdown: string;
-  handleChange: (markdown: string) => void;
+  readonly?: boolean;
+  handleChange?: (markdown: string) => void;
 };
 
-export default function Editor({ markdown, handleChange }: Props) {
+export default function Editor({
+  markdown,
+  readonly = false,
+  handleChange,
+}: Props) {
   const { colorMode } = useColorMode();
   const editor = useCreateBlockNote();
 
   const onChange = async () => {
     const markdown = await editor.blocksToMarkdownLossy(editor.document);
-    handleChange(markdown);
+    handleChange?.(markdown);
   };
 
   useEffect(() => {
@@ -30,6 +35,11 @@ export default function Editor({ markdown, handleChange }: Props) {
   }, []);
 
   return (
-    <BlockNoteView editor={editor} theme={colorMode} onChange={onChange} />
+    <BlockNoteView
+      aria-readonly={readonly}
+      editor={editor}
+      theme={colorMode}
+      onChange={onChange}
+    />
   );
 }

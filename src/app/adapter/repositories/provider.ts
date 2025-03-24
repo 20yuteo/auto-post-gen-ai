@@ -20,17 +20,17 @@ export class RepositoryProvider {
   prompts: PromptsRepository;
 
   constructor() {
-    if (process.env.ENV === "production") {
-      this.tweet = new TweetRepositoryImpl();
-      this.llm = new LLMRepositoryImpl();
-      this.slack = new SlackRepositoryImpl();
-      this.indieHackers = new IndieHackersRepositoryImpl();
-    } else {
-      this.tweet = new TweetRepositoryEmpty();
-      this.llm = new LLMRepositoryEmpty();
-      this.slack = new SlackRepositoryEmpty();
-      this.indieHackers = new IndieHackersRepositoryImpl();
-    }
+    // if (process.env.ENV === "production") {
+    this.tweet = new TweetRepositoryImpl();
+    this.llm = new LLMRepositoryImpl();
+    this.slack = new SlackRepositoryImpl();
+    this.indieHackers = new IndieHackersRepositoryImpl();
+    // } else {
+    //   this.tweet = new TweetRepositoryEmpty();
+    //   this.llm = new LLMRepositoryEmpty();
+    //   this.slack = new SlackRepositoryEmpty();
+    //   this.indieHackers = new IndieHackersRepositoryImpl();
+    // }
 
     this.prompts = new PromptsRepositoryImple();
   }

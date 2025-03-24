@@ -11,7 +11,6 @@ export class LLMRepositoryImpl implements LLMRepository {
     });
 
     const response = await model.generateContent(prompt);
-    console.log(response.response.text());
     return response.response.text();
   }
 }
