@@ -6,7 +6,8 @@ import { v4 } from "uuid";
 const PromptsRepository = new RepositoryProvider().prompts;
 
 export type PromptRequest = {
-  title: string;
+  id?: number;
+  title?: string;
   markdown: string;
 };
 
@@ -18,10 +19,17 @@ export async function GET() {
 export async function POST(req: Request) {
   const data: PromptRequest = await req.json();
   const PromptsRepository = new RepositoryProvider().prompts;
+  const LlmRepository = new RepositoryProvider().llm;
+  const prompt = `
+    以下の内容を要約したタイトルを作ってください。
+
+    ${data.markdown}
+  `;
+  const title = await LlmRepository.generateContent(prompt);
   const userId = v4();
   const input: PromptInput = {
     userId,
-    title: data.title,
+    title,
     content: data.markdown,
   };
   const result = await PromptsRepository.create(input);

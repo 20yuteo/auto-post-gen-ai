@@ -1,13 +1,12 @@
 import { RepositoryProvider } from "@/app/adapter/repositories/provider";
 import { PromptInput } from "@/app/domain/repositories/prompts";
-import { Params } from "next/dist/server/request/params";
 import { NextResponse } from "next/server";
 import { v4 } from "uuid";
 
 const PromptsRepository = new RepositoryProvider().prompts;
 
 export type PromptRequest = {
-  title: string;
+  id?: number;
   markdown: string;
 };
 
@@ -20,19 +19,34 @@ export async function GET(
     return NextResponse.json({ ok: false });
   }
   const prompt = await PromptsRepository.findById(id as string);
+
+  if (!prompt) {
+    return NextResponse.json({ ok: false });
+  }
+
   return NextResponse.json({ prompt });
 }
 
-export async function POST(req: Request) {
+export async function PUT(req: Request) {
   const data: PromptRequest = await req.json();
   const PromptsRepository = new RepositoryProvider().prompts;
-  const userId = v4();
-  const input: PromptInput = {
-    userId,
-    title: data.title,
+  const LlmRepository = new RepositoryProvider().llm;
+  const id = data.id;
+  if (!id) {
+    return NextResponse.json({ ok: false });
+  }
+
+  const prompt = await PromptsRepository.findById(String(id));
+
+  if (!prompt) {
+    return NextResponse.json({ ok: false });
+  }
+
+  const updatePrompt = {
+    ...prompt,
     content: data.markdown,
   };
-  const result = await PromptsRepository.create(input);
-  console.log({ result });
+
+  await PromptsRepository.update(updatePrompt);
   return NextResponse.json({ ok: true });
 }

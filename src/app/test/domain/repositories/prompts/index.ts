@@ -20,4 +20,8 @@ export class PromptsRepositoryEmpty implements PromptsRepository {
       content: "test",
     });
   }
+
+  update(): Promise<void> {
+    return Promise.resolve();
+  }
 }

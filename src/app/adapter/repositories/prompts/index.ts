@@ -42,4 +42,18 @@ export class PromptsRepositoryImple implements PromptsRepository {
     };
     return prompt;
   }
+
+  async update(input: PromptInput): Promise<void> {
+    if (!input.id) {
+      throw new Error("id is required");
+    }
+
+    await dbClient
+      .update(prompts)
+      .set({
+        content: input.content,
+      })
+      .where(eq(prompts.id, input.id))
+      .execute();
+  }
 }
