@@ -3,13 +3,16 @@ import { PromptInput } from "@/app/domain/repositories/prompts";
 import { NextResponse } from "next/server";
 import { v4 } from "uuid";
 
+const PromptsRepository = new RepositoryProvider().prompts;
+
 export type PromptRequest = {
   title: string;
   markdown: string;
 };
 
 export async function GET() {
-  return NextResponse.json({ message: "Hello from API!" });
+  const prompts = await PromptsRepository.findAll();
+  return NextResponse.json({ prompts });
 }
 
 export async function POST(req: Request) {

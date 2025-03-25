@@ -1,7 +1,17 @@
 "use client";
-
-import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import { ColorModeProvider, useColorMode } from "@/components/ui/color-mode";
+import { Provider } from "@/components/ui/provider";
+import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
+
+const config = defineConfig({
+  globalCss: {
+    html: {
+      colorPalette: "blue",
+    },
+  },
+});
+
+export const system = createSystem(defaultConfig, config);
 
 export default function RootLayout({
   children,
@@ -10,11 +20,16 @@ export default function RootLayout({
 }>) {
   const { colorMode } = useColorMode();
   return (
-    <html lang="ja" className={colorMode} style={{ colorScheme: colorMode }}>
+    <html
+      lang="ja"
+      className={colorMode}
+      style={{ colorScheme: colorMode }}
+      suppressHydrationWarning
+    >
       <body>
-        <ChakraProvider value={defaultSystem}>
+        <Provider>
           <ColorModeProvider>{children}</ColorModeProvider>
-        </ChakraProvider>
+        </Provider>
       </body>
     </html>
   );

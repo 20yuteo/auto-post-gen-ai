@@ -7,4 +7,6 @@ export type PromptInput = {
 
 export interface PromptsRepository {
   create: (input: PromptInput) => Promise<void>;
+
+  findAll: () => Promise<PromptInput[]>;
 }

@@ -15,4 +15,9 @@ export class PromptsRepositoryImple implements PromptsRepository {
       .execute();
     return Promise.resolve();
   }
+
+  async findAll(): Promise<PromptInput[]> {
+    const res = await dbClient.select().from(prompts).execute();
+    return res.map((item) => ({ ...item, userId: item.userId || "" }));
+  }
 }

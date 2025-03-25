@@ -10,7 +10,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { Editor } from "../components/ui/editor/DynamicEditor";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { PromptRequest } from "@/app/api/prompts/route";
 import GeneratedPromptView from "../components/ui/generatedPromptView/GeneratedPromptView";
 
@@ -19,10 +19,18 @@ type PromptType = {
   ok: true;
 };
 
+type PromptInput = {
+  id?: string;
+  userId: string;
+  title: string;
+  content: string;
+};
+
 export default function Prompt() {
   const [markdown, setMarkdown] = useState("");
   const [title, setTitle] = useState("");
   const [generatedContent, setGeneratedContent] = useState<string>();
+  const [prompts, setPrompts] = useState<PromptInput[]>([]);
 
   const handleChange = (markdown: string) => {
     setMarkdown(markdown);
@@ -64,27 +72,51 @@ export default function Prompt() {
     setGeneratedContent(data.content);
   }, [markdown]);
 
+  useEffect(() => {
+    const fetchPrompts = async () => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/prompts`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const result: { prompts: PromptInput[] } = await res.json();
+      setPrompts(result.prompts);
+    };
+
+    fetchPrompts();
+  }, []);
+
   return (
     <Flex direction="row" gap={16} justifyContent="space-between">
-      <Flex direction="column" gap={4} width="70rem" margin="0 auto">
+      <Flex direction="column" gap={4} width="100%" margin="0 auto">
         <Heading size="2xl">
           Let's set up a prompt to generate X posts 😎
         </Heading>
-        <Input
-          value={title}
-          placeholder="Please input title..."
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        {generatedContent ? (
-          <Editor markdown={generatedContent} readonly />
-        ) : (
-          <Editor markdown={markdown} handleChange={handleChange} />
-        )}
-        <GeneratedPromptView
-          content={generatedContent}
-          handleTryPrompt={handleTryPrompt}
-          handleRegenerate={handleTryPrompt}
-        />
+        <Flex direction="row" gap={4} alignItems="center">
+          <Flex direction="column" gap={4}></Flex>
+          <Flex direction="column" gap={4}>
+            <Input
+              value={title}
+              placeholder="Please input title..."
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            {generatedContent ? (
+              <Editor markdown={generatedContent} readonly />
+            ) : (
+              <Editor markdown={markdown} handleChange={handleChange} />
+            )}
+            <GeneratedPromptView
+              content={generatedContent}
+              handleTryPrompt={handleTryPrompt}
+              handleRegenerate={handleTryPrompt}
+            />
+          </Flex>
+        </Flex>
       </Flex>
     </Flex>
   );
