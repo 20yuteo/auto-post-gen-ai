@@ -2,6 +2,7 @@
 import { ColorModeProvider, useColorMode } from "@/components/ui/color-mode";
 import { Provider } from "@/components/ui/provider";
 import { createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const config = defineConfig({
   globalCss: {
@@ -20,17 +21,19 @@ export default function RootLayout({
 }>) {
   const { colorMode } = useColorMode();
   return (
-    <html
-      lang="ja"
-      className={colorMode}
-      style={{ colorScheme: colorMode }}
-      suppressHydrationWarning
-    >
-      <body>
-        <Provider>
-          <ColorModeProvider>{children}</ColorModeProvider>
-        </Provider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html
+        lang="ja"
+        className={colorMode}
+        style={{ colorScheme: colorMode }}
+        suppressHydrationWarning
+      >
+        <body>
+          <Provider>
+            <ColorModeProvider>{children}</ColorModeProvider>
+          </Provider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
