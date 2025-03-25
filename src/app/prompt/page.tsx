@@ -118,7 +118,13 @@ export default function Prompt() {
 
   return (
     <Flex direction="row" gap={16} justifyContent="space-between">
-      <Flex direction="column" gap={4} width="100%" margin="0 auto">
+      <Flex
+        direction="column"
+        gap={4}
+        width="100%"
+        margin="0 auto"
+        padding={16}
+      >
         <Heading size="5xl" textAlign="center">
           Let's set up a prompt to generate X posts 😎
         </Heading>
