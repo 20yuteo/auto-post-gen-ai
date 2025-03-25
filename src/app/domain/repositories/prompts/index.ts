@@ -9,4 +9,6 @@ export interface PromptsRepository {
   create: (input: PromptInput) => Promise<void>;
 
   findAll: () => Promise<PromptInput[]>;
+
+  findById: (id: string) => Promise<PromptInput>;
 }

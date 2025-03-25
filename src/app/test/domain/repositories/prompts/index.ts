@@ -11,4 +11,13 @@ export class PromptsRepositoryEmpty implements PromptsRepository {
   findAll(): Promise<PromptInput[]> {
     return Promise.resolve([]);
   }
+
+  findById(id: string): Promise<PromptInput> {
+    return Promise.resolve({
+      id: "1",
+      userId: "1",
+      title: "test",
+      content: "test",
+    });
+  }
 }

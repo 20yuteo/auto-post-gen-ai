@@ -6,6 +6,7 @@ import {
   Flex,
   Heading,
   Input,
+  Link,
   Portal,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -13,6 +14,7 @@ import { Editor } from "../components/ui/editor/DynamicEditor";
 import { useCallback, useEffect, useState } from "react";
 import { PromptRequest } from "@/app/api/prompts/route";
 import GeneratedPromptView from "../components/ui/generatedPromptView/GeneratedPromptView";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type PromptType = {
   content: string;
@@ -27,6 +29,7 @@ type PromptInput = {
 };
 
 export default function Prompt() {
+  const searchParams = useSearchParams();
   const [markdown, setMarkdown] = useState("");
   const [title, setTitle] = useState("");
   const [generatedContent, setGeneratedContent] = useState<string>();
@@ -73,6 +76,25 @@ export default function Prompt() {
   }, [markdown]);
 
   useEffect(() => {
+    const prompt_id = searchParams.get("prompt_id");
+    if (prompt_id) {
+      (async () => {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/prompts/${prompt_id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const result: { prompt: PromptInput } = await res.json();
+        setTitle(result.prompt.title);
+        setMarkdown(result.prompt.content);
+      })();
+    }
+
     const fetchPrompts = async () => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/prompts`,
@@ -97,9 +119,27 @@ export default function Prompt() {
         <Heading size="2xl">
           Let's set up a prompt to generate X posts 😎
         </Heading>
-        <Flex direction="row" gap={4} alignItems="center">
-          <Flex direction="column" gap={4}></Flex>
-          <Flex direction="column" gap={4}>
+        <Flex direction="row" gap={4} alignItems="center" width="100%">
+          <Flex direction="column" gap={2} padding={16}>
+            {prompts.map((prompt) => (
+              <Flex
+                direction="row"
+                gap={4}
+                key={prompt.id}
+                bgColor="gray.700"
+                borderRadius="md"
+                padding={4}
+                width="32rem"
+              >
+                <Flex direction="column" gap={4}>
+                  <Link href={`/prompt?prompt_id=${prompt.id}`}>
+                    <Heading size="md">{prompt.title}</Heading>
+                  </Link>
+                </Flex>
+              </Flex>
+            ))}
+          </Flex>
+          <Flex direction="column" gap={4} grow={2} padding={4}>
             <Input
               value={title}
               placeholder="Please input title..."
