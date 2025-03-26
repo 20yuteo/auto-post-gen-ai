@@ -20,7 +20,6 @@ type PromptInput = {
 };
 
 export default function Prompt() {
-  const searchParams = useSearchParams();
   const [markdown, setMarkdown] = useState("");
   const [generatedContent, setGeneratedContent] = useState<string>();
   const [prompts, setPrompts] = useState<PromptInput[]>([]);
@@ -81,6 +80,7 @@ export default function Prompt() {
   }, [markdown]);
 
   useEffect(() => {
+    const searchParams = useSearchParams();
     const prompt_id = searchParams.get("prompt_id");
     if (prompt_id) {
       setTargetId(prompt_id);

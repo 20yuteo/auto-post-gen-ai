@@ -21,16 +21,6 @@ import {
 import { AiFillHome } from "react-icons/ai";
 import { BsChatLeftTextFill } from "react-icons/bs";
 
-const config = defineConfig({
-  globalCss: {
-    html: {
-      colorPalette: "blue",
-    },
-  },
-});
-
-export const system = createSystem(defaultConfig, config);
-
 export default function RootLayout({
   children,
 }: Readonly<{
