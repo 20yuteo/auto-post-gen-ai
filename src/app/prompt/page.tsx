@@ -94,6 +94,7 @@ export default function Prompt() {
         );
 
         const result: { prompt: PromptInput } = await res.json();
+        console.log({ result });
         setMarkdown(result.prompt.content);
       })();
     }

@@ -28,11 +28,16 @@ export default function Editor({
   useEffect(() => {
     async function loadInitialHTML() {
       const blocks = await editor.tryParseMarkdownToBlocks(markdown);
-      editor.replaceBlocks(editor.document, blocks);
+      if (blocks.length > 0) {
+        editor.replaceBlocks(editor.document, blocks);
+      }
     }
+
     loadInitialHTML();
     onChange();
-  }, []);
+  }, [editor, markdown]);
+
+  console.log({ markdown });
 
   return (
     <BlockNoteView
