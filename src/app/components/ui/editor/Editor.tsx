@@ -37,8 +37,6 @@ export default function Editor({
     onChange();
   }, [editor, markdown]);
 
-  console.log({ markdown });
-
   return (
     <BlockNoteView
       aria-readonly={readonly}

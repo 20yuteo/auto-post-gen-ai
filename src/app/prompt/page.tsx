@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { PromptRequest } from "@/app/api/prompts/route";
 import GeneratedPromptView from "../components/ui/generatedPromptView/GeneratedPromptView";
 import { useSearchParams } from "next/navigation";
+import { useColorMode } from "@/components/ui/color-mode";
 
 type PromptType = {
   content: string;
@@ -24,6 +25,7 @@ export default function Prompt() {
   const [generatedContent, setGeneratedContent] = useState<string>();
   const [prompts, setPrompts] = useState<PromptInput[]>([]);
   const [targetId, setTargetId] = useState<string>();
+  const { colorMode } = useColorMode();
 
   const handleChange = (markdown: string) => {
     setMarkdown(markdown);
@@ -130,17 +132,17 @@ export default function Prompt() {
           Let's set up a prompt to generate X posts 😎
         </Heading>
         <Flex direction="row" gap={4} alignItems="flex-start" width="100%">
-          <Flex direction="column" gap={2} padding={16}>
+          <Flex direction="column" gap={2} width="20rem">
             {prompts.map((prompt) => (
               <Link href={`/prompt?prompt_id=${prompt.id}`} key={prompt.id}>
                 <Flex
                   direction="row"
                   gap={4}
                   key={prompt.id}
-                  bgColor="gray.700"
+                  bgColor={colorMode === "dark" ? "gray.700" : "gray.200"}
                   borderRadius="md"
                   padding={2}
-                  width="32rem"
+                  width="100%"
                 >
                   <Flex direction="column" gap={4} width="100%">
                     <Heading
@@ -156,7 +158,7 @@ export default function Prompt() {
               </Link>
             ))}
           </Flex>
-          <Flex direction="column" gap={4} grow={2} padding={4}>
+          <Flex direction="column" gap={4} grow={2} padding={4} width="25rem">
             {generatedContent ? (
               <Editor markdown={generatedContent} readonly />
             ) : (

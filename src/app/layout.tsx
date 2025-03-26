@@ -59,7 +59,7 @@ export default function RootLayout({
                     bg="dark"
                     p={4}
                     borderRight={"1px solid #8f9192"}
-                    w="365px"
+                    w="12rem"
                     h="100vh"
                   >
                     <Flex
@@ -69,11 +69,11 @@ export default function RootLayout({
                       padding={8}
                       gap={8}
                     >
-                      <Link href="/" color={colorMode} fontSize={32}>
+                      <Link href="/" color={colorMode} fontSize={24}>
                         <AiFillHome size={24} />
                         Home
                       </Link>
-                      <Link href="/prompt" color={colorMode} fontSize={32}>
+                      <Link href="/prompt" color={colorMode} fontSize={24}>
                         <BsChatLeftTextFill size={24} />
                         Prompt
                       </Link>
