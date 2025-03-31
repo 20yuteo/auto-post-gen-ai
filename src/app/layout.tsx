@@ -22,9 +22,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { userId } = useAuth();
   const { colorMode } = useColorMode();
-  const accessToken = useAtomValue(accessTokenAtom);
 
   return (
     <ClerkProvider>
