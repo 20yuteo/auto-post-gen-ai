@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -20,6 +20,7 @@
     "@blocknote/react": "^0.26.0",
     "@chakra-ui/react": "^3.14.2",
     "@clerk/backend": "^1.25.8",
+    "@clerk/clerk-sdk-node": "^5.1.6",
     "@clerk/nextjs": "^6.12.9",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
@@ -41,6 +42,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
+    "twitter-api-v2": "^1.22.0",
     "uuid": "^11.1.0",
     "uuidv4": "^6.2.13"
   },

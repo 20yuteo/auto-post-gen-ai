@@ -22,9 +22,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { userId } = useAuth();
   const { colorMode } = useColorMode();
   const accessToken = useAtomValue(accessTokenAtom);
-  console.log({ accessToken });
 
   return (
     <ClerkProvider>
@@ -80,6 +80,27 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
 }
 
 function Sidebar({ colorMode }: { colorMode: string }) {
+  const { userId } = useAuth();
+
+  const handleClick = () => {
+    if (userId) {
+      fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/posts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((err) => console.error("Error fetching OAuth Token:", err));
+    }
+  };
+
   return (
     <Box bg="dark" p={4} borderRight="1px solid #8f9192" w="12rem" h="100vh">
       <Flex
@@ -108,6 +129,9 @@ function Sidebar({ colorMode }: { colorMode: string }) {
         <SignedIn>
           <UserButton />
         </SignedIn>
+        <form>
+          <Button onClick={handleClick}>OAuth Token</Button>
+        </form>
       </Flex>
     </Box>
   );

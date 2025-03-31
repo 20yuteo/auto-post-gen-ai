@@ -42,6 +42,7 @@ export default function Editor({
       aria-readonly={readonly}
       editor={editor}
       theme={colorMode}
+      lang="ja"
       onChange={onChange}
     />
   );

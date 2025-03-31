@@ -5,6 +5,6 @@ export async function POST(req: Request) {
   const data = await req.json();
 
   const LLMRepository = new RepositoryProvider().llm;
-  const res = await LLMRepository.generateContent(data.prormpt);
+  const res = await LLMRepository.generateContent(data.prompt);
   return NextResponse.json({ ok: true, content: res });
 }

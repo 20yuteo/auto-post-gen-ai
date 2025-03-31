@@ -8,7 +8,7 @@ const PromptsRepository = new RepositoryProvider().prompts;
 export type PromptRequest = {
   id?: number;
   title?: string;
-  markdown: string;
+  prompt: string;
 };
 
 export async function GET() {
@@ -23,14 +23,14 @@ export async function POST(req: Request) {
   const prompt = `
     以下の内容を要約したタイトルを作ってください。
 
-    ${data.markdown}
+    ${data.prompt}
   `;
   const title = await LlmRepository.generateContent(prompt);
   const userId = v4();
   const input: PromptInput = {
     userId,
     title,
-    content: data.markdown,
+    content: data.prompt,
   };
   const result = await PromptsRepository.create(input);
   console.log({ result });

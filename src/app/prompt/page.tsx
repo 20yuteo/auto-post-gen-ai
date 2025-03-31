@@ -1,11 +1,12 @@
 "use client";
-import { Button, Flex, Heading, Link } from "@chakra-ui/react";
+import { Button, Flex, Heading, Link, Textarea } from "@chakra-ui/react";
 import { Editor } from "../components/ui/editor/DynamicEditor";
 import { useCallback, useEffect, useState } from "react";
 import { PromptRequest } from "@/app/api/prompts/route";
 import GeneratedPromptView from "../components/ui/generatedPromptView/GeneratedPromptView";
 import { useSearchParams } from "next/navigation";
 import { useColorMode } from "@/components/ui/color-mode";
+import PromptsDrawer from "@/components/ui/promptsDrawer";
 
 type PromptType = {
   content: string;
@@ -20,19 +21,21 @@ type PromptInput = {
 };
 
 export default function Prompt() {
-  const [markdown, setMarkdown] = useState("");
+  const searchParams = useSearchParams();
+  const prompt_id = searchParams.get("prompt_id");
+  const [prompt, setPrompt] = useState("");
   const [generatedContent, setGeneratedContent] = useState<string>();
   const [prompts, setPrompts] = useState<PromptInput[]>([]);
   const [targetId, setTargetId] = useState<string>();
   const { colorMode } = useColorMode();
 
-  const handleChange = (markdown: string) => {
-    setMarkdown(markdown);
+  const handleChange = (prompt: string) => {
+    setPrompt(prompt);
   };
 
   const handleSubmit = async () => {
     const body: PromptRequest = {
-      markdown,
+      prompt,
     };
 
     if (targetId) {
@@ -71,17 +74,15 @@ export default function Prompt() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          prormpt: markdown,
+          prompt,
         }),
       }
     );
     const data: PromptType = await response.json();
     setGeneratedContent(data.content);
-  }, [markdown]);
+  }, [prompt]);
 
   useEffect(() => {
-    const searchParams = useSearchParams();
-    const prompt_id = searchParams.get("prompt_id");
     if (prompt_id) {
       setTargetId(prompt_id);
       (async () => {
@@ -97,7 +98,7 @@ export default function Prompt() {
 
         const result: { prompt: PromptInput } = await res.json();
         console.log({ result });
-        setMarkdown(result.prompt.content);
+        setPrompt(result.prompt.content);
       })();
     }
 
@@ -120,7 +121,13 @@ export default function Prompt() {
   }, []);
 
   return (
-    <Flex direction="row" gap={16} justifyContent="space-between">
+    <Flex
+      direction="row"
+      gap={16}
+      justifyContent="space-between"
+      height="100vh"
+      width="100vw"
+    >
       <Flex
         direction="column"
         gap={4}
@@ -132,39 +139,20 @@ export default function Prompt() {
           Let's set up a prompt to generate X posts 😎
         </Heading>
         <Flex direction="row" gap={4} alignItems="flex-start" width="100%">
-          <Flex direction="column" gap={2} width="20rem">
-            {prompts.map((prompt) => (
-              <Link href={`/prompt?prompt_id=${prompt.id}`} key={prompt.id}>
-                <Flex
-                  direction="row"
-                  gap={4}
-                  key={prompt.id}
-                  bgColor={colorMode === "dark" ? "gray.700" : "gray.200"}
-                  borderRadius="md"
-                  padding={2}
-                  width="100%"
-                >
-                  <Flex direction="column" gap={4} width="100%">
-                    <Heading
-                      size="md"
-                      textOverflow="ellipsis"
-                      overflow="hidden"
-                      whiteSpace="nowrap"
-                    >
-                      {prompt.title}
-                    </Heading>
-                  </Flex>
-                </Flex>
-              </Link>
-            ))}
-          </Flex>
           <Flex direction="column" gap={4} grow={2} padding={4} width="25rem">
             {generatedContent ? (
               <Editor markdown={generatedContent} readonly />
             ) : (
-              <Editor markdown={markdown} handleChange={handleChange} />
+              <Textarea
+                variant="subtle"
+                size="xl"
+                resize="none"
+                value={prompt}
+                onChange={(e) => handleChange(e.target.value)}
+              />
             )}
             <Flex direction="row" gap={4}>
+              <PromptsDrawer />
               <GeneratedPromptView
                 content={generatedContent}
                 handleTryPrompt={handleTryPrompt}
