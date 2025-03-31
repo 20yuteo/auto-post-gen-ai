@@ -80,9 +80,9 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
 function Sidebar({ colorMode }: { colorMode: string }) {
   const { userId } = useAuth();
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (userId) {
-      fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/posts`, {
+      await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/posts`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -90,12 +90,7 @@ function Sidebar({ colorMode }: { colorMode: string }) {
         body: JSON.stringify({
           userId,
         }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((err) => console.error("Error fetching OAuth Token:", err));
+      });
     }
   };
 
@@ -127,8 +122,8 @@ function Sidebar({ colorMode }: { colorMode: string }) {
         <SignedIn>
           <UserButton />
         </SignedIn>
-        <form>
-          <Button onClick={handleClick}>OAuth Token</Button>
+        <form action={handleClick}>
+          <Button type="submit">OAuth Token</Button>
         </form>
       </Flex>
     </Box>
