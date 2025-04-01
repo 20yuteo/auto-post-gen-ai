@@ -1,9 +1,8 @@
 export type User = {
-  id: string;
+  id?: string;
   extId: string;
   name: string;
   email: string;
-  accessToken: string;
 };
 
 export interface UserRepository {

@@ -11,21 +11,20 @@ export async function GET(req: Request) {
 
   if (userId) {
     const extIdUser = await userRepository.findByExtId(userId);
+    const res = await clerkClient.users.getUserOauthAccessToken(userId, "x");
+    const accessToken = res.data[0].token;
 
     if (extIdUser) {
-      return NextResponse.json({ token: extIdUser.accessToken });
+      return NextResponse.json({ token: accessToken });
     }
 
     const target = await clerkClient.users.getUser(userId);
-    const res = await clerkClient.users.getUserOauthAccessToken(userId, "x");
-    const accessToken = res.data[0].token;
 
     const user: User = {
       id: target.id,
       extId: userId,
       name: target.fullName || "",
       email: (target.emailAddresses[0] || {}).emailAddress || "",
-      accessToken,
     };
     await userRepository.create(user);
   }

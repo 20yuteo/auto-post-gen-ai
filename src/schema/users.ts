@@ -5,7 +5,6 @@ export const users = pgTable("users", {
   extId: text("ext_id").notNull(),
   name: text("name"),
   email: text("email"),
-  accessToken: text("access_token"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
   deletedAt: timestamp("deleted_at"),
