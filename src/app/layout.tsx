@@ -23,17 +23,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const { colorMode } = useColorMode();
+  const [clientColorMode, setClientColorMode] = useState<string>("dark");
+
+  useEffect(() => {
+    setClientColorMode(colorMode);
+  }, [colorMode]);
 
   return (
     <ClerkProvider>
       <AuthWrapper>
         <html
           lang="ja"
-          className={colorMode}
-          style={{ colorScheme: colorMode }}
+          className={clientColorMode}
+          style={{ colorScheme: clientColorMode }}
           suppressHydrationWarning
         >
-          <body>
+          <body suppressHydrationWarning>
             <Provider>
               <ColorModeProvider>
                 <Box maxW="100vw" mx="auto" maxH="100vh">
@@ -67,6 +72,15 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
       )
         .then((res) => res.json())
         .then((data) => {
+          if (data.error) {
+            console.error("Error fetching OAuth Token:", data.error);
+            return;
+          }
+          console.log(data.token.data);
+
+          if (!data.token.data) {
+            return;
+          }
           const oauthToken = data.token.data[0].token;
           setOauthToken(oauthToken);
         })

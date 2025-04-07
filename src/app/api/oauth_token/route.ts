@@ -12,6 +12,9 @@ export async function GET(req: Request) {
   if (userId) {
     const extIdUser = await userRepository.findByExtId(userId);
     const res = await clerkClient.users.getUserOauthAccessToken(userId, "x");
+    if (res.data.length === 0) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
     const accessToken = res.data[0].token;
 
     if (extIdUser) {
