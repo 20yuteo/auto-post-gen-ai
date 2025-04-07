@@ -12,3 +12,10 @@ services:
     volumes:
       - ./data:/var/lib/postgresql/data
       - ./supabase:/docker-entrypoint-initdb.d
+  tf:
+    image: hashicorp/terraform:1.6.6
+    container_name: terraform_runner
+    working_dir: /workspace/infra
+    volumes:
+      - ./:/workspace
+      - /Users/arakakitatsuki/.aws:/root/.aws:ro

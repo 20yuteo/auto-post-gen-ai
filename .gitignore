@@ -43,3 +43,12 @@ next-env.d.ts
 data/*
 # clerk configuration (can include secrets)
 /.clerk/
+
+# terraform
+infra/.terraform.*
+infra/.terraform
+infra/lambda/upload/index.js
+infra/lambda/upload.zip
+# Terraform state files
+infra/terraform.tfstate
+infra/terraform.tfstate.backup
