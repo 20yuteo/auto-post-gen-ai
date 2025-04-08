@@ -2,6 +2,7 @@
   "name": "auto-post-gen-ai",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,7 +12,8 @@
     "drop": "drizzle-kit drop",
     "migrate": "drizzle-kit push",
     "format": "biome format --write",
-    "check": "biome check --write"
+    "check": "biome check --write",
+    "build:lambda": "node --loader ts-node/esm --experimental-specifier-resolution=node --no-warnings esbuild-lambda.ts"
   },
   "dependencies": {
     "@ark-ui/react": "^5.3.1",
@@ -52,9 +54,11 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "esbuild": "^0.25.2",
     "eslint": "^9",
     "eslint-config-next": "15.2.2",
     "next-transpile-modules": "^10.0.1",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   }
 }

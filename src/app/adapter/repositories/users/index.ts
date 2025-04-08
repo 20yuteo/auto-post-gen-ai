@@ -15,7 +15,6 @@ export class userRepositoryImple implements UserRepository {
       extId: res[0].extId,
       name: res[0].name || "",
       email: res[0].email || "",
-      accessToken: res[0].accessToken || "",
     };
     return user;
   }
@@ -31,7 +30,6 @@ export class userRepositoryImple implements UserRepository {
       extId: res[0].extId,
       name: res[0].name || "",
       email: res[0].email || "",
-      accessToken: res[0].accessToken || "",
     };
 
     return user;
@@ -44,7 +42,6 @@ export class userRepositoryImple implements UserRepository {
         extId: user.extId,
         name: user.name,
         email: user.email,
-        accessToken: user.accessToken,
       })
       .returning()
       .execute();
@@ -53,7 +50,6 @@ export class userRepositoryImple implements UserRepository {
       extId: res[0].extId,
       name: res[0].name || "",
       email: res[0].email || "",
-      accessToken: res[0].accessToken || "",
     };
 
     return createdUser;

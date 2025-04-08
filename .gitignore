@@ -52,3 +52,4 @@ infra/lambda/upload.zip
 # Terraform state files
 infra/terraform.tfstate
 infra/terraform.tfstate.backup
+infra/lambda
