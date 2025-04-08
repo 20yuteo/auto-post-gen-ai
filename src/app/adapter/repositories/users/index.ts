@@ -4,6 +4,16 @@ import { users } from "@/schema/users";
 import { eq } from "drizzle-orm";
 
 export class userRepositoryImple implements UserRepository {
+  async findAll(): Promise<User[]> {
+    const userList = await dbClient.select().from(users).execute();
+    return userList.map((user) => ({
+      id: user.id,
+      extId: user.extId,
+      name: user.name || "",
+      email: user.email || "",
+    }));
+  }
+
   async findByExtId(extId: string): Promise<User> {
     const res = await dbClient
       .select()

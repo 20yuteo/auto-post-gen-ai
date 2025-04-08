@@ -1,9 +1,6 @@
 import type { LLMRepository } from "@/app/domain/repositories/llm";
 import type { SlackRepository } from "@/app/domain/repositories/slack";
 import type { TweetRepository } from "@/app/domain/repositories/tweet";
-import { LLMRepositoryEmpty } from "@/app/test/domain/repositories/llm";
-import { SlackRepositoryEmpty } from "@/app/test/domain/repositories/slack";
-import { TweetRepositoryEmpty } from "@/app/test/domain/repositories/tweet";
 import { LLMRepositoryImpl } from "./llm";
 import { SlackRepositoryImpl } from "./slack";
 import { TweetRepositoryImpl } from "./tweet";
