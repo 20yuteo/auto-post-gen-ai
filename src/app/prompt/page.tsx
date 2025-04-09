@@ -1,7 +1,7 @@
 "use client";
 import { Button, Flex, Heading, Link, Textarea } from "@chakra-ui/react";
 import { Editor } from "../components/ui/editor/DynamicEditor";
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { PromptRequest } from "@/app/api/prompts/route";
 import GeneratedPromptView from "../components/ui/generatedPromptView/GeneratedPromptView";
 import { useSearchParams } from "next/navigation";
@@ -20,7 +20,7 @@ type PromptInput = {
   content: string;
 };
 
-export default function Prompt() {
+const PromptView = () => {
   const searchParams = useSearchParams();
   const prompt_id = searchParams.get("prompt_id");
   const [prompt, setPrompt] = useState("");
@@ -171,5 +171,13 @@ export default function Prompt() {
         </Flex>
       </Flex>
     </Flex>
+  );
+};
+
+export default function Prompt() {
+  return (
+    <Suspense>
+      <PromptView />
+    </Suspense>
   );
 }
