@@ -8,7 +8,7 @@ export type User = {
 export interface UserRepository {
   findAll: () => Promise<User[]>;
 
-  findByExtId: (extId: string) => Promise<User>;
+  findByExtId: (extId: string) => Promise<User | undefined>;
 
   getUser: (userId: string) => Promise<User>;
 

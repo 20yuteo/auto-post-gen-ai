@@ -14,12 +14,15 @@ export class userRepositoryImple implements UserRepository {
     }));
   }
 
-  async findByExtId(extId: string): Promise<User> {
+  async findByExtId(extId: string): Promise<User | undefined> {
     const res = await dbClient
       .select()
       .from(users)
       .where(eq(users.extId, extId))
       .execute();
+    if (res.length === 0) {
+      return undefined;
+    }
     const user: User = {
       id: res[0].id,
       extId: res[0].extId,
