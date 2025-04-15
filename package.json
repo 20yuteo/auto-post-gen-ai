@@ -32,6 +32,7 @@
     "crypto": "^1.0.1",
     "crypto-browserify": "^3.12.1",
     "crypto-js": "^4.2.0",
+    "dotenv": "^16.5.0",
     "drizzle-kit": "^0.30.5",
     "drizzle-orm": "^0.40.0",
     "framer-motion": "^12.5.0",

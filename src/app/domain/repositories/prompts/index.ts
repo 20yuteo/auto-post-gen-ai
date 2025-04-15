@@ -12,5 +12,7 @@ export interface PromptsRepository {
 
   findById: (id: string) => Promise<PromptInput | undefined>;
 
+  findByUserId: (userId: string) => Promise<PromptInput[]>;
+
   update: (input: PromptInput) => Promise<void>;
 }

@@ -110,7 +110,7 @@ variable "NEXT_PUBLIC_SUPABASE_ANON_KEY" {
   type = string
 }
 
-variable "DATABASE_URL" {
+variable "DB_URL" {
   type = string
 }
 
@@ -119,5 +119,9 @@ variable "ENV" {
 }
 
 variable "NEXT_PUBLIC_API_ENDPOINT" {
+  type = string
+}
+
+variable "CLERK_SECRET_KEY" {
   type = string
 }

@@ -21,6 +21,10 @@ export class PromptsRepositoryEmpty implements PromptsRepository {
     });
   }
 
+  findByUserId(userId: string): Promise<PromptInput[]> {
+    return Promise.resolve([]);
+  }
+
   update(): Promise<void> {
     return Promise.resolve();
   }

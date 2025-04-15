@@ -1,6 +1,6 @@
 data "archive_file" "upload_lambda_zip" {
   type        = "zip"
-  source_dir  = "${path.module}/lambda/"
+  source_file = "${path.module}/lambda/index.js"
   output_path = "${path.module}/lambda/upload.zip"
 }
 
@@ -11,7 +11,6 @@ resource "aws_lambda_function" "example_lambda" {
   runtime          = "nodejs20.x"
   filename         = data.archive_file.upload_lambda_zip.output_path
   source_code_hash = data.archive_file.upload_lambda_zip.output_base64sha256
-
   environment {
     variables = {
       API_KEY                       = var.API_KEY,
@@ -42,9 +41,10 @@ resource "aws_lambda_function" "example_lambda" {
       SUPABASE_SERVICE_ROLE_KEY     = var.SUPABASE_SERVICE_ROLE_KEY,
       POSTGRES_HOST                 = var.POSTGRES_HOST,
       NEXT_PUBLIC_SUPABASE_ANON_KEY = var.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-      DATABASE_URL                  = var.DATABASE_URL,
+      DB_URL                        = var.DB_URL,
       ENV                           = var.ENV,
       NEXT_PUBLIC_API_ENDPOINT      = var.NEXT_PUBLIC_API_ENDPOINT,
+      CLERK_SECRET_KEY              = var.CLERK_SECRET_KEY,
     }
   }
 }

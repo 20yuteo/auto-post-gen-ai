@@ -6,7 +6,7 @@ export const settings =
     ? {
         host: "localhost",
         port: 5432,
-        database: process.env.POSTGRES_DATABASE ?? "", // ?? "" で空文字列をデフォルト値に
+        database: process.env.POSTGRES_DATABASE ?? "",
         user: process.env.POSTGRES_PASSWORD ?? "",
         password: process.env.POSTGRES_PASSWORD ?? "",
       }
@@ -18,8 +18,13 @@ export const settings =
         password: process.env.SUPABASE_PASSWORD ?? "",
       };
 
-const connection = postgres(process.env.DATABASE_URL ?? "", {
-  ...settings,
-});
+const connectionString = process.env.DB_URL || "";
+
+const connection =
+  process.env.ENV === "development"
+    ? postgres({
+        ...settings,
+      })
+    : postgres(connectionString, { prepare: false });
 
 export const dbClient = drizzle(connection);

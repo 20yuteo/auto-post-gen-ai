@@ -43,6 +43,15 @@ export class PromptsRepositoryImple implements PromptsRepository {
     return prompt;
   }
 
+  async findByUserId(userId: string): Promise<PromptInput[]> {
+    const res = await dbClient
+      .select()
+      .from(prompts)
+      .where(eq(prompts.userId, userId))
+      .execute();
+    return res.map((item) => ({ ...item, userId: item.userId || "" }));
+  }
+
   async update(input: PromptInput): Promise<void> {
     if (!input.id) {
       throw new Error("id is required");

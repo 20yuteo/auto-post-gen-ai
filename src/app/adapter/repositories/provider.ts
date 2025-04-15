@@ -10,6 +10,9 @@ import { PromptsRepository } from "@/app/domain/repositories/prompts";
 import { PromptsRepositoryImple } from "./prompts";
 import { UserRepository } from "@/app/domain/repositories/users";
 import { userRepositoryImple } from "./users";
+import { TweetRepositoryEmpty } from "@/app/test/domain/repositories/tweet";
+import { LLMRepositoryEmpty } from "@/app/test/domain/repositories/llm";
+import { SlackRepositoryEmpty } from "@/app/test/domain/repositories/slack";
 
 export class RepositoryProvider {
   tweet: TweetRepository;

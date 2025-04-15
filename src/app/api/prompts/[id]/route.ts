@@ -7,7 +7,7 @@ const PromptsRepository = new RepositoryProvider().prompts;
 
 export type PromptRequest = {
   id?: number;
-  markdown: string;
+  prompt: string;
 };
 
 export async function GET(
@@ -44,7 +44,7 @@ export async function PUT(req: Request) {
 
   const updatePrompt = {
     ...prompt,
-    content: data.markdown,
+    content: data.prompt,
   };
 
   await PromptsRepository.update(updatePrompt);
