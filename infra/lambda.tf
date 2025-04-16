@@ -11,6 +11,7 @@ resource "aws_lambda_function" "example_lambda" {
   runtime          = "nodejs20.x"
   filename         = data.archive_file.upload_lambda_zip.output_path
   source_code_hash = data.archive_file.upload_lambda_zip.output_base64sha256
+  timeout          = 30
   environment {
     variables = {
       API_KEY                       = var.API_KEY,

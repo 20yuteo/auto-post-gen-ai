@@ -6,6 +6,7 @@ const provider = new RepositoryProvider();
 const slackRepository = provider.slack;
 const userRepository = provider.users;
 const promptsRepository = provider.prompts;
+const llmRepository = provider.llm;
 
 export const handler = async (event: any) => {
   try {
@@ -30,15 +31,21 @@ export const handler = async (event: any) => {
           return;
         }
 
-        const prompt = await promptsRepository.findByUserId(user.id);
+        console.log("user.id is defined", user.id);
 
-        // const response = await new TwitterApi(token).v2.tweet(
-        //   "Hello from Next.js!"
-        // );
-        // console.log("successfully sent message to slack");
-        // await slackRepository.postMessage(
-        //   `successfully sent message to slack: ${response}`
-        // );
+        const prompts = await promptsRepository.findByUserId(user.id);
+
+        console.log({ prompts });
+
+        if (prompts.length > 0) {
+          const prompt = prompts[0];
+          const res = await llmRepository.generateContent(prompt.content);
+          const response = await new TwitterApi(token).v2.tweet(res);
+
+          await slackRepository.postMessage(
+            `successfully sent message to slack: ${response}`
+          );
+        }
       })
     );
 
