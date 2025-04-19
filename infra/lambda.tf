@@ -4,8 +4,8 @@ data "archive_file" "upload_lambda_zip" {
   output_path = "${path.module}/lambda/upload.zip"
 }
 
-resource "aws_lambda_function" "example_lambda" {
-  function_name    = "example_lambda"
+resource "aws_lambda_function" "x_post_lambda" {
+  function_name    = "x_post_lambda"
   role             = aws_iam_role.lambda_exec.arn
   handler          = "index.handler"
   runtime          = "nodejs20.x"
@@ -53,7 +53,7 @@ resource "aws_lambda_function" "example_lambda" {
 resource "aws_lambda_permission" "allow_eventbridge" {
   statement_id  = "AllowExecutionFromEventBridge"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.example_lambda.function_name
+  function_name = aws_lambda_function.x_post_lambda.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.example_rule.arn
+  source_arn    = aws_cloudwatch_event_rule.x_post_event_rule.arn
 }

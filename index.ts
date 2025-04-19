@@ -43,7 +43,7 @@ export const handler = async (event: any) => {
           const response = await new TwitterApi(token).v2.tweet(res);
 
           await slackRepository.postMessage(
-            `successfully sent message to slack: ${response}`
+            `successfully sent message to slack: ${JSON.stringify(response)}`
           );
         }
       })
@@ -55,5 +55,6 @@ export const handler = async (event: any) => {
     };
   } catch (e) {
     console.error({ e });
+    await slackRepository.postMessage(`error occured: ${e}`);
   }
 };
