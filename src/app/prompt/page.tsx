@@ -1,13 +1,18 @@
 "use client";
-import { Button, Flex, Heading, Link, Textarea } from "@chakra-ui/react";
-import { Editor } from "../components/ui/editor/DynamicEditor";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Icon,
+  ProgressCircle,
+  Textarea,
+} from "@chakra-ui/react";
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { PromptRequest } from "@/app/api/prompts/route";
 import GeneratedPromptView from "../components/ui/generatedPromptView/GeneratedPromptView";
-import { useSearchParams } from "next/navigation";
-import { useColorMode } from "@/components/ui/color-mode";
-import PromptsDrawer from "@/components/ui/promptsDrawer";
-
+import { useRouter, useSearchParams } from "next/navigation";
+import { HiHeart } from "react-icons/hi";
 type PromptType = {
   content: string;
   ok: true;
@@ -25,43 +30,51 @@ const PromptView = () => {
   const prompt_id = searchParams.get("prompt_id");
   const [prompt, setPrompt] = useState("");
   const [generatedContent, setGeneratedContent] = useState<string>();
-  const [prompts, setPrompts] = useState<PromptInput[]>([]);
   const [targetId, setTargetId] = useState<string>();
-  const { colorMode } = useColorMode();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleChange = (prompt: string) => {
     setPrompt(prompt);
   };
 
   const handleSubmit = async () => {
-    const body: PromptRequest = {
-      prompt,
-    };
+    try {
+      setIsLoading(true);
 
-    if (targetId) {
-      await fetch(
-        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/prompts/${targetId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...body,
-            id: targetId,
-          }),
-        }
-      );
-      return;
+      const body: PromptRequest = {
+        prompt,
+      };
+
+      if (targetId) {
+        await fetch(
+          `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/prompts/${targetId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              ...body,
+              id: targetId,
+            }),
+          }
+        );
+        return;
+      }
+
+      await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/prompts`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+    } catch (error) {
+      console.error({ error });
+    } finally {
+      setIsLoading(false);
     }
-
-    await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/prompts`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
   };
 
   const handleTryPrompt = useCallback(async () => {
@@ -97,7 +110,6 @@ const PromptView = () => {
         );
 
         const result: { prompt: PromptInput } = await res.json();
-        console.log({ result });
         setPrompt(result.prompt.content);
       })();
     }
@@ -114,7 +126,9 @@ const PromptView = () => {
       );
 
       const result: { prompts: PromptInput[] } = await res.json();
-      setPrompts(result.prompts);
+      setPrompt(result.prompts[0].content);
+      setTargetId(result.prompts[0].id);
+      router.replace(`/prompt?prompt_id=${result.prompts[0].id}`);
     };
 
     fetchPrompts();
@@ -140,19 +154,14 @@ const PromptView = () => {
         </Heading>
         <Flex direction="row" gap={4} alignItems="flex-start" width="100%">
           <Flex direction="column" gap={4} grow={2} padding={4} width="25rem">
-            {generatedContent ? (
-              <Editor markdown={generatedContent} readonly />
-            ) : (
-              <Textarea
-                variant="subtle"
-                size="xl"
-                resize="none"
-                value={prompt}
-                onChange={(e) => handleChange(e.target.value)}
-              />
-            )}
+            <Textarea
+              variant="subtle"
+              size="xl"
+              resize="none"
+              value={prompt}
+              onChange={(e) => handleChange(e.target.value)}
+            />
             <Flex direction="row" gap={4}>
-              <PromptsDrawer />
               <GeneratedPromptView
                 content={generatedContent}
                 handleTryPrompt={handleTryPrompt}
@@ -164,7 +173,26 @@ const PromptView = () => {
                 rounded={16}
                 onClick={handleSubmit}
               >
-                Save🥑
+                Save
+                {isLoading ? (
+                  <ProgressCircle.Root value={null} size="xs">
+                    <ProgressCircle.Circle>
+                      <ProgressCircle.Track />
+                      <ProgressCircle.Range />
+                    </ProgressCircle.Circle>
+                  </ProgressCircle.Root>
+                ) : (
+                  <Box
+                    data-state="open"
+                    _open={{
+                      animation: "pulse 1000ms ease-out",
+                    }}
+                  >
+                    <Icon size="lg" color="pink.500">
+                      <HiHeart />
+                    </Icon>
+                  </Box>
+                )}
               </Button>
             </Flex>
           </Flex>
