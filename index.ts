@@ -52,7 +52,7 @@ export const handler = async (event: any) => {
             7. Do not include replies—only output the post itself.
             8. Always aim to communicate useful, specific information as briefly and clearly as possible.
           `;
-          const res = await llmRepository.generateContent(prompt.content);
+          const res = await llmRepository.generateContent(systemPrompt);
           const response = await new TwitterApi(token).v2.tweet(res);
 
           await slackRepository.postMessage(
