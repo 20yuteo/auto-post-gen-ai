@@ -1,15 +1,11 @@
 import { RepositoryProvider } from "@/app/adapter/repositories/provider";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
-  const data = await req.json();
-
-  const LLMRepository = new RepositoryProvider().llm;
-  const systemPrompt = `
+export const getSystemPrompt = (goal: string) => `
     You are a social media content planner who shares helpful information for engineers on X (formerly Twitter).
-    Your goal is ${data.prompt}.
+    Your goal is ${goal}.
     Please follow these guidelines:
-    1. Keep posts short and concise (mind X's character limit).
+    1. Be mindful of creating longer-form content.
     2. Use emojis to make the post visually appealing and approachable.
     3. Add relevant hashtags to increase visibility.
     4. Focus on introducing specific tools or techniques rather than abstract concepts.
@@ -19,6 +15,11 @@ export async function POST(req: Request) {
     8. Always aim to communicate useful, specific information as briefly and clearly as possible.
   `;
 
-  const res = await LLMRepository.generateContent(systemPrompt);
+export async function POST(req: Request) {
+  const data = await req.json();
+
+  const LLMRepository = new RepositoryProvider().llm;
+
+  const res = await LLMRepository.generateContent(getSystemPrompt(data.prompt));
   return NextResponse.json({ ok: true, content: res });
 }
