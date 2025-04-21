@@ -4,7 +4,6 @@ import {
   Button,
   Flex,
   Heading,
-  Icon,
   ProgressCircle,
   Textarea,
 } from "@chakra-ui/react";
@@ -12,7 +11,7 @@ import { Suspense, useCallback, useEffect, useState } from "react";
 import { PromptRequest } from "@/app/api/prompts/route";
 import GeneratedPromptView from "../components/ui/generatedPromptView/GeneratedPromptView";
 import { useRouter, useSearchParams } from "next/navigation";
-import { HiHeart } from "react-icons/hi";
+
 type PromptType = {
   content: string;
   ok: true;
@@ -185,12 +184,10 @@ const PromptView = () => {
                   <Box
                     data-state="open"
                     _open={{
-                      animation: "pulse 1000ms ease-out",
+                      animation: "spin 500ms ease-out",
                     }}
                   >
-                    <Icon size="lg" color="pink.500">
-                      <HiHeart />
-                    </Icon>
+                    🥑
                   </Box>
                 )}
               </Button>
