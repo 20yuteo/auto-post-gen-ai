@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { AiFillHome } from "react-icons/ai";
 import { BsChatLeftTextFill } from "react-icons/bs";
 import { accessTokenAtom } from "./atoms";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtom } from "jotai";
 
 export default function RootLayout({
   children,
@@ -92,22 +92,6 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
 }
 
 function Sidebar({ colorMode }: { colorMode: string }) {
-  const { userId } = useAuth();
-
-  const handleClick = async () => {
-    if (userId) {
-      await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/posts`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId,
-        }),
-      });
-    }
-  };
-
   return (
     <Box bg="dark" p={4} borderRight="1px solid #8f9192" w="12rem" h="100vh">
       <Flex
@@ -136,9 +120,6 @@ function Sidebar({ colorMode }: { colorMode: string }) {
         <SignedIn>
           <UserButton />
         </SignedIn>
-        <form action={handleClick}>
-          <Button type="submit">OAuth Token</Button>
-        </form>
       </Flex>
     </Box>
   );
