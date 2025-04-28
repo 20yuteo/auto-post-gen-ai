@@ -13,6 +13,8 @@ import { userRepositoryImple } from "./users";
 import { TweetRepositoryEmpty } from "@/app/test/domain/repositories/tweet";
 import { LLMRepositoryEmpty } from "@/app/test/domain/repositories/llm";
 import { SlackRepositoryEmpty } from "@/app/test/domain/repositories/slack";
+import { SchedulesRepositoryImple } from "./schedules";
+import { SchedulesRepository } from "@/app/domain/repositories/schedules";
 
 export class RepositoryProvider {
   tweet: TweetRepository;
@@ -21,6 +23,7 @@ export class RepositoryProvider {
   indieHackers: IndieHackersRepository;
   prompts: PromptsRepository;
   users: UserRepository;
+  schedules: SchedulesRepository;
 
   constructor() {
     // if (process.env.ENV === "production") {
@@ -29,6 +32,7 @@ export class RepositoryProvider {
     this.slack = new SlackRepositoryImpl();
     this.indieHackers = new IndieHackersRepositoryImpl();
     this.users = new userRepositoryImple();
+    this.schedules = new SchedulesRepositoryImple();
     // } else {
     //   this.tweet = new TweetRepositoryEmpty();
     //   this.llm = new LLMRepositoryEmpty();

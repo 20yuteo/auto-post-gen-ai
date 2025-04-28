@@ -1,13 +1,16 @@
 import { RepositoryProvider } from "@/app/adapter/repositories/provider";
-import { PromptInput } from "@/app/domain/repositories/prompts";
 import { NextResponse } from "next/server";
-import { v4 } from "uuid";
 
 const PromptsRepository = new RepositoryProvider().prompts;
+const SchedulesRepository = new RepositoryProvider().schedules;
 
 export type PromptRequest = {
   id?: number;
   prompt: string;
+  schedules: {
+    label: string;
+    value: string;
+  }[];
 };
 
 export async function GET(
@@ -24,13 +27,21 @@ export async function GET(
     return NextResponse.json({ ok: false });
   }
 
-  return NextResponse.json({ prompt });
+  const schedules = await SchedulesRepository.findByPromptId(id as string);
+
+  return NextResponse.json({
+    prompt,
+    schedules: schedules.map((schedule) => ({
+      label: schedule.scheduledDate,
+      value: schedule.scheduledDate,
+    })),
+  });
 }
 
 export async function PUT(req: Request) {
   const data: PromptRequest = await req.json();
   const PromptsRepository = new RepositoryProvider().prompts;
-  const LlmRepository = new RepositoryProvider().llm;
+
   const id = data.id;
   if (!id) {
     return NextResponse.json({ ok: false });
@@ -48,5 +59,21 @@ export async function PUT(req: Request) {
   };
 
   await PromptsRepository.update(updatePrompt);
+
+  const schadules = await SchedulesRepository.findByPromptId(String(id));
+
+  const scheduleIds = schadules.map((s) => s.id as string);
+
+  await SchedulesRepository.deleteAll(scheduleIds);
+
+  data.schedules.map(async (schadule) => {
+    const input = {
+      promptId: String(id),
+      scheduledDate: schadule.value,
+    };
+
+    await SchedulesRepository.create(input);
+  });
+
   return NextResponse.json({ ok: true });
 }

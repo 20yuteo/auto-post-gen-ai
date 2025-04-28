@@ -11,6 +11,7 @@ import { Suspense, useCallback, useEffect, useState } from "react";
 import { PromptRequest } from "@/app/api/prompts/route";
 import GeneratedPromptView from "../components/ui/generatedPromptView/GeneratedPromptView";
 import { useRouter, useSearchParams } from "next/navigation";
+import { TimeSelector } from "../components/ui/timeSelector";
 
 type PromptType = {
   content: string;
@@ -22,12 +23,24 @@ type PromptInput = {
   userId: string;
   title: string;
   content: string;
+  schedules: SchedulesInput[];
+};
+
+type SchedulesInput = {
+  label: string;
+  value: string;
 };
 
 const PromptView = () => {
   const searchParams = useSearchParams();
   const prompt_id = searchParams.get("prompt_id");
   const [prompt, setPrompt] = useState("");
+  const [schedules, setSchedules] = useState<
+    {
+      label: string;
+      value: string;
+    }[]
+  >([]);
   const [generatedContent, setGeneratedContent] = useState<string>();
   const [targetId, setTargetId] = useState<string>();
   const router = useRouter();
@@ -37,12 +50,22 @@ const PromptView = () => {
     setPrompt(prompt);
   };
 
+  const handleScheduleChange = (
+    schedules: {
+      label: string;
+      value: string;
+    }[]
+  ) => {
+    setSchedules(schedules);
+  };
+
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
 
       const body: PromptRequest = {
         prompt,
+        schedules,
       };
 
       if (targetId) {
@@ -108,8 +131,15 @@ const PromptView = () => {
           }
         );
 
-        const result: { prompt: PromptInput } = await res.json();
+        const result: { prompt: PromptInput; schedules: SchedulesInput[] } =
+          await res.json();
         setPrompt(result.prompt.content);
+        setSchedules(
+          result.schedules.map((s) => ({
+            label: s.label,
+            value: s.value,
+          }))
+        );
       })();
     }
 
@@ -125,7 +155,16 @@ const PromptView = () => {
       );
 
       const result: { prompts: PromptInput[] } = await res.json();
+      if (result.prompts.length === 0) {
+        return;
+      }
+
       setPrompt(result.prompts[0].content);
+      const response = result.prompts[0].schedules.map((s) => ({
+        label: s.label,
+        value: s.label,
+      }));
+      setSchedules(response);
       setTargetId(result.prompts[0].id);
       router.replace(`/prompt?prompt_id=${result.prompts[0].id}`);
     };
@@ -161,6 +200,10 @@ const PromptView = () => {
               onChange={(e) => handleChange(e.target.value)}
             />
             <Flex direction="row" gap={4}>
+              <TimeSelector
+                schedules={schedules}
+                onChange={handleScheduleChange}
+              />
               <GeneratedPromptView
                 content={generatedContent}
                 handleTryPrompt={handleTryPrompt}

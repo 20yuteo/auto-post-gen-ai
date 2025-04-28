@@ -4,8 +4,13 @@ import {
 } from "@/app/domain/repositories/prompts";
 
 export class PromptsRepositoryEmpty implements PromptsRepository {
-  create(): Promise<void> {
-    return Promise.resolve();
+  create(): Promise<PromptInput> {
+    return Promise.resolve({
+      id: "1",
+      userId: "1",
+      title: "test",
+      content: "test",
+    });
   }
 
   findAll(): Promise<PromptInput[]> {

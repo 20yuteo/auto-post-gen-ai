@@ -8,14 +8,20 @@ import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export class PromptsRepositoryImple implements PromptsRepository {
-  create(input: PromptInput): Promise<void> {
-    dbClient
+  async create(input: PromptInput): Promise<PromptInput> {
+    const res = await dbClient
       .insert(prompts)
       .values({
         ...input,
       })
-      .execute();
-    return Promise.resolve();
+      .returning();
+
+    return Promise.resolve({
+      id: res[0].id,
+      title: res[0].title,
+      content: res[0].content,
+      userId: res[0].userId || "",
+    });
   }
 
   async findAll(): Promise<PromptInput[]> {

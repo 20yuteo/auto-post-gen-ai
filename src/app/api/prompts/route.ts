@@ -4,16 +4,49 @@ import { NextResponse } from "next/server";
 import { v4 } from "uuid";
 
 const PromptsRepository = new RepositoryProvider().prompts;
+const SchedulesRepository = new RepositoryProvider().schedules;
 
 export type PromptRequest = {
   id?: number;
   title?: string;
   prompt: string;
+  schedules: {
+    label: string;
+    value: string;
+  }[];
 };
 
 export async function GET() {
   const prompts = await PromptsRepository.findAll();
-  return NextResponse.json({ prompts });
+
+  const schedules = await Promise.all(
+    prompts.map(async (prompt) => {
+      if (!prompt.id) {
+        return {
+          label: "",
+          value: "",
+        };
+      }
+
+      const schadules = await SchedulesRepository.findByPromptId(prompt.id);
+
+      return schadules.map((s) => ({
+        label: s.scheduledDate,
+        value: s.id,
+      }));
+    })
+  );
+
+  const response = {
+    ...prompts.map((prompt, index) => ({
+      id: prompt.id,
+      title: prompt.title,
+      content: prompt.content,
+      schedules: schedules[index],
+    })),
+  };
+
+  return NextResponse.json({ prompts: response });
 }
 
 export async function POST(req: Request) {
@@ -33,6 +66,10 @@ export async function POST(req: Request) {
     content: data.prompt,
   };
   const result = await PromptsRepository.create(input);
-  console.log({ result });
+
+  const schedules = data.schedules.map((schedule) => ({
+    promptId: result.id,
+    scheduledDate: schedule.value,
+  }));
   return NextResponse.json({ ok: true });
 }
