@@ -1,5 +1,5 @@
 import { RepositoryProvider } from "@/app/adapter/repositories/provider";
-import { getSystemPrompt } from "@/app/api/prompts/try/route";
+import { getSystemPrompt } from "@/app/domain/entities/prompts";
 import { createClerkClient } from "@clerk/clerk-sdk-node";
 import { TwitterApi } from "twitter-api-v2";
 
