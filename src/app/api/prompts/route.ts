@@ -19,6 +19,10 @@ export type PromptRequest = {
 export async function GET() {
   const prompts = await PromptsRepository.findAll();
 
+  if (prompts.length === 0) {
+    return NextResponse.json({ prompts: [] });
+  }
+
   const schedules = await Promise.all(
     prompts.map(async (prompt) => {
       if (!prompt.id) {

@@ -155,9 +155,11 @@ const PromptView = () => {
       );
 
       const result: { prompts: PromptInput[] } = await res.json();
-      if (result.prompts.length === 0) {
+      if (!result.prompts || result.prompts.length === 0) {
         return;
       }
+
+      console.log("result.prompts", result.prompts);
 
       setPrompt(result.prompts[0].content);
       const response = result.prompts[0].schedules.map((s) => ({
@@ -168,7 +170,6 @@ const PromptView = () => {
       setTargetId(result.prompts[0].id);
       router.replace(`/prompt?prompt_id=${result.prompts[0].id}`);
     };
-
     fetchPrompts();
   }, []);
 

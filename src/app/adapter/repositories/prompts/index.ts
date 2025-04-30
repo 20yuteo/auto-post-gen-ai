@@ -4,8 +4,10 @@ import {
   PromptInput,
 } from "@/app/domain/repositories/prompts";
 import { prompts } from "@/schema/prompts";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
+import { users } from "@/schema/users";
 
 export class PromptsRepositoryImple implements PromptsRepository {
   async create(input: PromptInput): Promise<PromptInput> {
@@ -25,8 +27,23 @@ export class PromptsRepositoryImple implements PromptsRepository {
   }
 
   async findAll(): Promise<PromptInput[]> {
-    const res = await dbClient.select().from(prompts).execute();
-    return res.map((item) => ({ ...item, userId: item.userId || "" }));
+    const { userId } = await auth();
+
+    if (!userId) {
+      return [];
+    }
+
+    const res = await dbClient
+      .select()
+      .from(prompts)
+      .innerJoin(users, eq(users.id, prompts.userId))
+      .where(and(eq(users.extId, userId), eq(prompts.userId, users.id)))
+      .execute();
+
+    return res.map((item) => ({
+      ...item.prompts,
+      userId: item.users.id || "",
+    }));
   }
 
   async findById(id: string): Promise<PromptInput> {
