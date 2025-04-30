@@ -8,7 +8,6 @@ export class PromptsRepositoryEmpty implements PromptsRepository {
     return Promise.resolve({
       id: "1",
       userId: "1",
-      title: "test",
       content: "test",
     });
   }
@@ -21,7 +20,6 @@ export class PromptsRepositoryEmpty implements PromptsRepository {
     return Promise.resolve({
       id: "1",
       userId: "1",
-      title: "test",
       content: "test",
     });
   }

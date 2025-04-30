@@ -20,7 +20,6 @@ export class PromptsRepositoryImple implements PromptsRepository {
 
     return Promise.resolve({
       id: res[0].id,
-      title: res[0].title,
       content: res[0].content,
       userId: res[0].userId || "",
     });
@@ -59,7 +58,6 @@ export class PromptsRepositoryImple implements PromptsRepository {
 
     const prompt: PromptInput = {
       id: res[0].id,
-      title: res[0].title,
       content: res[0].content,
       userId: res[0].userId || "",
     };

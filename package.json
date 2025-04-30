@@ -8,9 +8,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "sql": "ENV=production drizzle-kit generate",
+    "sql": "drizzle-kit generate",
     "drop": "drizzle-kit drop",
-    "migrate": "ENV=production drizzle-kit push",
+    "migrate": "drizzle-kit push",
     "format": "biome format --write",
     "check": "biome check --write",
     "build:lambda": "node --loader ts-node/esm --experimental-specifier-resolution=node --no-warnings esbuild-lambda.ts"

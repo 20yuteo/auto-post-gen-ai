@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import { useColorMode } from "../color-mode";
 import { useEffect, useState } from "react";
-import { RepositoryProvider } from "@/app/adapter/repositories/provider";
 import { PromptInput } from "@/app/domain/repositories/prompts";
 
 export default function PromptsDrawer() {
@@ -75,7 +74,7 @@ export default function PromptsDrawer() {
                           overflow="hidden"
                           whiteSpace="nowrap"
                         >
-                          {prompt.title}
+                          {prompt.content}
                         </Heading>
                       </Flex>
                     </Flex>

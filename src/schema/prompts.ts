@@ -1,10 +1,8 @@
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
-import { users } from "./users";
 
 export const prompts = pgTable("prompts", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id"),
-  title: text("title").notNull(),
   content: text("content").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),

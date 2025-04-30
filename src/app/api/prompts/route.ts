@@ -8,7 +8,6 @@ const SchedulesRepository = new RepositoryProvider().schedules;
 
 export type PromptRequest = {
   id?: number;
-  title?: string;
   prompt: string;
   schedules: {
     label: string;
@@ -44,7 +43,6 @@ export async function GET() {
   const response = {
     ...prompts.map((prompt, index) => ({
       id: prompt.id,
-      title: prompt.title,
       content: prompt.content,
       schedules: schedules[index],
     })),
@@ -56,24 +54,19 @@ export async function GET() {
 export async function POST(req: Request) {
   const data: PromptRequest = await req.json();
   const PromptsRepository = new RepositoryProvider().prompts;
-  const LlmRepository = new RepositoryProvider().llm;
-  const prompt = `
-    以下の内容を要約したタイトルを作ってください。
-
-    ${data.prompt}
-  `;
-  const title = await LlmRepository.generateContent(prompt);
   const userId = v4();
   const input: PromptInput = {
     userId,
-    title,
     content: data.prompt,
   };
   const result = await PromptsRepository.create(input);
 
   const schedules = data.schedules.map((schedule) => ({
-    promptId: result.id,
+    promptId: result.id!,
     scheduledDate: schedule.value,
   }));
+
+  schedules.map((schedule) => SchedulesRepository.create(schedule));
+
   return NextResponse.json({ ok: true });
 }
