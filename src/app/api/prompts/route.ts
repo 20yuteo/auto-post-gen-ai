@@ -3,6 +3,7 @@ import { PromptInput } from "@/app/domain/repositories/prompts";
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 
+const UserRepository = new RepositoryProvider().users;
 const PromptsRepository = new RepositoryProvider().prompts;
 const SchedulesRepository = new RepositoryProvider().schedules;
 
@@ -16,7 +17,18 @@ export type PromptRequest = {
 };
 
 export async function GET() {
-  const prompts = await PromptsRepository.findAll();
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ ok: false, prompts: [] });
+  }
+
+  const user = await UserRepository.findByExtId(userId);
+
+  if (!user || !user.id) {
+    return NextResponse.json({ ok: false, prompts: [] });
+  }
+
+  const prompts = await PromptsRepository.findAll(user.id);
 
   if (prompts.length === 0) {
     return NextResponse.json({ prompts: [] });

@@ -25,13 +25,7 @@ export class PromptsRepositoryImple implements PromptsRepository {
     });
   }
 
-  async findAll(): Promise<PromptInput[]> {
-    const { userId } = await auth();
-
-    if (!userId) {
-      return [];
-    }
-
+  async findAll(userId: string): Promise<PromptInput[]> {
     const res = await dbClient
       .select()
       .from(prompts)
@@ -45,11 +39,11 @@ export class PromptsRepositoryImple implements PromptsRepository {
     }));
   }
 
-  async findById(id: string): Promise<PromptInput> {
+  async findById(id: string, userId: string): Promise<PromptInput> {
     const res = await dbClient
       .select()
       .from(prompts)
-      .where(eq(prompts.id, id))
+      .where(and(eq(prompts.id, id), eq(prompts.userId, userId)))
       .execute();
 
     if (!res[0]) {
