@@ -26,57 +26,68 @@ export const handler = async (event: any) => {
 
     await Promise.all(
       users.map(async (user) => {
-        const res = await client.users.getUserOauthAccessToken(user.extId, "x");
-        const token = res.data[0].token;
+        try {
+          const res = await client.users.getUserOauthAccessToken(
+            user.extId,
+            "x"
+          );
+          const token = res.data[0].token;
 
-        if (!user.id) {
-          console.error("user.id is undefined");
-          return;
-        }
-
-        const prompts = await promptsRepository.findByUserId(user.id);
-
-        if (prompts.length > 0) {
-          const prompt = prompts[0];
-          let schedules;
-          if (prompt.id) {
-            schedules = await scheduleRepository.findByPromptId(prompt.id);
+          if (!user.id) {
+            console.error("user.id is undefined");
+            return;
           }
-          //   const nowUtc = dayjs.utc();
-          //   let isScheduled = false;
-          //   if (schedules) {
-          //     const schedule = schedules.find((schedule) => {
-          //       const targetTime = dayjs(schedule.scheduledDate, "HH:mm");
-          //       console.log({ targetTime });
-          //       console.log({ nowUtc });
-          //       return targetTime.hour() === nowUtc.hour();
-          //     });
 
-          //     isScheduled = !!schedule;
-          //   }
+          const prompts = await promptsRepository.findByUserId(user.id);
 
-          //   if (!isScheduled) {
-          //     await slackRepository.postMessage(
-          //       `it is not scheduled: ${JSON.stringify(prompt)}`
-          //     );
-          //     return;
-          //   }
+          if (prompts.length > 0) {
+            const prompt = prompts[0];
+            console.log({ prompt });
+            let schedules;
+            if (prompt.id) {
+              schedules = await scheduleRepository.findByPromptId(prompt.id);
+            }
 
-          await slackRepository.postMessage(
-            `schedules: 
-            ${JSON.stringify(
-              schedules?.map((schedule) => schedule.scheduledDate)
-            )}
-            `
-          );
+            console.log({ schedules });
+            //   const nowUtc = dayjs.utc();
+            //   let isScheduled = false;
+            //   if (schedules) {
+            //     const schedule = schedules.find((schedule) => {
+            //       const targetTime = dayjs(schedule.scheduledDate, "HH:mm");
+            //       console.log({ targetTime });
+            //       console.log({ nowUtc });
+            //       return targetTime.hour() === nowUtc.hour();
+            //     });
 
-          const systemPrompt = getSystemPrompt(prompt.content);
-          const res = await llmRepository.generateContent(systemPrompt);
-          const response = await new TwitterApi(token).v2.tweet(res);
+            //     isScheduled = !!schedule;
+            //   }
 
-          await slackRepository.postMessage(
-            `successfully sent message to slack: ${JSON.stringify(response)}`
-          );
+            //   if (!isScheduled) {
+            //     await slackRepository.postMessage(
+            //       `it is not scheduled: ${JSON.stringify(prompt)}`
+            //     );
+            //     return;
+            //   }
+
+            await slackRepository.postMessage(
+              `schedules: 
+              ${JSON.stringify(
+                schedules?.map((schedule) => schedule.scheduledDate)
+              )}
+              `
+            );
+
+            const systemPrompt = getSystemPrompt(prompt.content);
+            const res = await llmRepository.generateContent(systemPrompt);
+            const response = await new TwitterApi(token).v2.tweet(res);
+
+            await slackRepository.postMessage(
+              `successfully sent message to slack: ${JSON.stringify(response)}`
+            );
+          }
+        } catch (error: any) {
+          console.error({ error });
+          await slackRepository.postMessage(`error occured: ${error}`);
         }
       })
     );

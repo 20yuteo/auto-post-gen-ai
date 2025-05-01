@@ -1,7 +1,7 @@
 import { RepositoryProvider } from "@/app/adapter/repositories/provider";
 import { PromptInput } from "@/app/domain/repositories/prompts";
 import { NextResponse } from "next/server";
-import { v4 } from "uuid";
+import { auth } from "@clerk/nextjs/server";
 
 const PromptsRepository = new RepositoryProvider().prompts;
 const SchedulesRepository = new RepositoryProvider().schedules;
@@ -54,7 +54,12 @@ export async function GET() {
 export async function POST(req: Request) {
   const data: PromptRequest = await req.json();
   const PromptsRepository = new RepositoryProvider().prompts;
-  const userId = v4();
+  const { userId } = await auth();
+
+  if (!userId) {
+    return NextResponse.json({ ok: false });
+  }
+
   const input: PromptInput = {
     userId,
     content: data.prompt,
